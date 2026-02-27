@@ -1,0 +1,66 @@
+#Case-1  [Yum / apt-get]
+
+FROM ubuntu:14.04
+RUN touch abc{1..100}
+RUN apt-get update && apt-install -y apache2 tree python3 openssh-server
+
+#Commnd to execute
+#docker image build -t myimg:v1 -f case1file .
+#docker run -itd --name myappv1 myimg:v1 
+
+#Case-2 [ngix html]
+
+FROM nginx
+RUN echo "my date" > /usr/share/nginx/www/index.htmml
+
+#Commnd to execute
+#docker image build -t myimg:v2 -f case1file .
+#docker run -itd --name myappv2 -p 80:80 myimg:2
+
+#Case- 3  [Label]
+
+FROM amazonlinux
+label name = "dev team"
+label email = "dev@mail.com"
+label mobile = "123456789"
+RUN touch bcd{1..9}
+RUN yum update && yum install -y python tree nginx
+
+#Commnd to execute
+#docker image build -t myimg:v3 -f case3file .
+#docker run -itd --name myappv3 myimg:v3
+
+#Case - 4  [ENVIRONMENT]
+
+FROM ubuntu
+label name = "Dev team"
+label email = "dev@mail.com"
+ENV name = cloud
+ENV pass = dock123
+RUN touch bcd{1..9}
+RUN yum update && yum install -y python tree nginx
+
+#Commnd to execute
+#docker image build -t myimg:v4 -f case1file .
+#docker run -itd --name myappv4 myimg:v4
+#docker exec <c-id> 
+#bash : env 
+
+
+#Case - 5 [COPY]
+
+FROM ubuntu
+label name = "Dev team"
+label email = "dev@mail.com"
+ENV name = cloud
+ENV pass = dock123
+RUN touch bcd{1..9}
+RUN yum update && yum install -y python tree nginx
+COPY India /etc/
+
+#Commnd to execute
+#docker image build -t myimg:v5 -f case1file .
+#docker run -itd --name myappv5 myimg:v5
+#Check the India in folder in /etc [It will be only copied if Folder is present in host]
+
+
