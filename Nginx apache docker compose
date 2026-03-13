@@ -1,0 +1,61 @@
+## 1 ## How to run nginx in container with File?
+ANS = Download & store a webpage in /root, unzip if the file is zipped.Then Open a Dockerfile using vim.
+
+#vim Dockerfile1
+
+FROM nginx
+RUN apt-get update && apt-get install -y unzip 
+COPY template.zip /usr/share/nginx/html/
+WORKDIR /usr/share/nginx/html/
+RUN unzip template.zip
+RUN mv template/* .
+
+#Commnd to execute
+#docker image build -t NGXimg:v1 -f  Dockerfile .
+#docker run -itd --name myngx1 NGXimg:v1
+
+
+## 2 ## How to run a apache service using Dockerfile?
+
+#vim Dockerfile2
+
+FROM ubuntu
+RUN apt-get update &&  apt-get install -y apache2 unzip
+WORKDIR /var/www/html/
+COPY  template.zip
+RUN unzip template.zip
+RUN mv template/* . 
+EXPOSE 80 
+CMD ["apachectl", "-D" , "FOREGROUND"]
+#       or        
+CMD apachectl -D "FOREGROUND"
+#       or  
+
+ENTRYPOINT ["apachectl", "-D" , "FOREGROUND"]
+#       or        
+ENTRYPOINT apachectl -D "FOREGROUND"
+
+#Commnd to execute
+#docker image build -t APACHEimg:v1 -f  Dockerfile .
+#docker run -itd --name myapache1 APACHEimg:v1
+
+## 3 ## How to run yaml using docker compose?
+
+#vim dockercompose.yaml
+
+VERSION: '3.1'
+SERVICE:
+  WEBSERVER:
+    IMAGE: nginx:lastest
+    CONTAINER_NAME: ngnxweb1
+    RESTART: unless-stopped
+    PORTS :
+        - "80:80" 
+
+#Command to execute
+#docker-compose up  // to start
+#docker-compose down // to stop & remove the container
+#docker container ls
+#docker-compose ps | top | rm  | stop | restart 
+    
+    
