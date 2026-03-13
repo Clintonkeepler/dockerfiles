@@ -64,3 +64,124 @@ COPY India /etc/
 #Check the India in folder in /etc [It will be only copied if Folder is present in host]
 
 
+
+#Case - 6 [User Add]
+
+FROM ubuntu
+label name = "Dev team"
+label email = "dev@mail.com"
+RUN touch bcd{1..9}
+RUN useradd tom && echo "tom:dock123" | chpasswd
+
+#Commnd to execute
+#docker image build -t myimg:v6 -f case1file .
+#docker run -itd --name myappv6 myimg:v6
+
+#Case - 7 [Env with useradd]
+
+FROM ubuntu
+RUN apt-get update && apt-get install -y nginx openssh-server
+ENV name = tom
+ENV pass = dock123
+RUN useradd $name && echo "$name:$pass" | chpasswd
+
+#Commnd to execute
+#docker image build -t myimg:v7 -f case1file .
+#docker run -itd --name myappv7 myimg:v7
+
+#Case - 7 [Login as Default]
+
+FROM ubuntu
+RUN apt-get update && apt-get install -y nginx openssh-server
+ENV name = tom
+ENV pass = dock123
+RUN useradd $name && echo "$name:$pass" | chpasswd
+USER $name
+
+#Commnd to execute
+#docker image build -t myimg:v7 -f case1file .
+#docker run -itd --name myappv7 myimg:v7
+
+#Case - 8 [Create File under user's home i.e. index.html]
+
+FROM ubuntu
+RUN apt-get update && apt-get install -y nginx openssh-server
+ENV name = tom
+ENV pass = dock123
+RUN useradd $name && echo "$name:$pass" | chpasswd
+COPY index.htmt /usr/share/nginx/www/
+USER $name
+
+#Commnd to execute
+#docker image build -t myimg:v8 -f case1file .
+#docker run -itd --name myappv8 myimg:v8
+
+#Case - 9 [Working Directory]
+
+FROM ubuntu
+RUN apt-get update && apt-get install -y nginx openssh-server
+ENV name = tom
+ENV pass = dock123
+RUN useradd $name && echo "$name:$pass" | chpasswd
+WORKDIR /usr/share/nginx/html/
+USER $name
+
+#Commnd to execute
+#docker image build -t myimg:v9 -f case1file .
+#docker run -itd --name myappv9 myimg:v9
+
+#Case - 10 [To unzip a file 'ADD']
+
+FROM ubuntu
+RUN apt-get update && apt-get install -y nginx openssh-server
+ENV name = tom
+ENV pass = dock123
+#RUN useradd $name && echo "$name:$pass" | chpasswd
+#USER $name
+ADD redhat.tar.gz /user/share/nginx/html/
+WORKDIR /usr/share/nginx/html/
+
+#Commnd to execute
+#docker image build -t myimg:v10 -f case1file .
+#docker run -itd --name myappv10 myimg:v10
+
+#Case - 11 [CMD in Dockerfile]
+
+FROM ubuntu
+RUN apt-get update && apt-get install -y nginx openssh-server
+ENV name = tom
+ENV pass = dock123
+#RUN useradd $name && echo "$name:$pass" | chpasswd
+#USER $name
+ADD redhat.tar.gz /user/share/nginx/html/
+WORKDIR /usr/share/nginx/html/
+CMD ["python3"]
+
+#Commnd to execute
+#docker image build -t myimg:v11 -f case1file .
+#docker run -itd --name myappv11 myimg:v11
+
+#Case - 12 [Multiple CMD] Correct format
+
+FROM ubuntu
+RUN apt-get update && apt-get install -y nginx python3 openssh-server openssh-client
+ENV name = tom
+ENV pass = dock123
+RUN useradd $name && echo "$name:$pass" | chpasswd
+#USER $name
+COPY index.htmt /usr/share/nginx/www/
+WORKDIR /usr/share/nginx/html/
+ADD redhat.tar.gz /user/share/nginx/html/
+RUN mkdir -p /var/run/sshd
+CMD ["python3"]
+#   or
+CMD ["tree"]
+#   or
+CMD ["/usr/sbin//sshd" , "-D"]
+
+#Commnd to execute
+#docker image build -t myimg:v12 -f case1file .
+#docker run -itd --name myappv12 myimg:v12
+
+
+
